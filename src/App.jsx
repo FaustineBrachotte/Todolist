@@ -33,6 +33,35 @@ function App() {
 		);
 	}
 
+	function toggleToDoEdit(id) {
+		setToDoList(
+			toDoList.map((toDo) =>
+				toDo.id === id
+					? {
+							...toDo,
+							edit: !toDo.edit,
+							// eslint-disable-next-line no-mixed-spaces-and-tabs
+					  }
+					: toDo
+			)
+		);
+	}
+
+	function editToDo(id, content) {
+		setToDoList(
+			toDoList.map((toDo) =>
+				toDo.id === id
+					? {
+							...toDo,
+							content,
+							edit: false,
+							// eslint-disable-next-line no-mixed-spaces-and-tabs
+					  }
+					: toDo
+			)
+		);
+	}
+
 	return (
 		<div className='d-flex flex-row justify-content align-item p-20'>
 			<div className='card container p-20'>
@@ -42,6 +71,8 @@ function App() {
 					toDoList={toDoList}
 					deleteToDo={deleteToDo}
 					toggleToDo={toggleToDo}
+					toggleToDoEdit={toggleToDoEdit}
+					editToDo={editToDo}
 				/>
 			</div>
 		</div>
