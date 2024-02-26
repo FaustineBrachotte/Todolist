@@ -19,12 +19,30 @@ function App() {
 		setToDoList(toDoList.filter((todo) => todo.id !== id));
 	}
 
+	function toggleToDo(id) {
+		setToDoList(
+			toDoList.map((toDo) =>
+				toDo.id === id
+					? {
+							...toDo,
+							done: !toDo.done,
+							// eslint-disable-next-line no-mixed-spaces-and-tabs
+					  }
+					: toDo
+			)
+		);
+	}
+
 	return (
 		<div className='d-flex flex-row justify-content align-item p-20'>
 			<div className='card container p-20'>
 				<h1 className='mb-20'>To do list</h1>
 				<AddToDo addToDo={addToDo} />
-				<ToDoList toDoList={toDoList} deleteToDo={deleteToDo} />
+				<ToDoList
+					toDoList={toDoList}
+					deleteToDo={deleteToDo}
+					toggleToDo={toggleToDo}
+				/>
 			</div>
 		</div>
 	);
