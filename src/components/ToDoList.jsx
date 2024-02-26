@@ -1,8 +1,19 @@
-function ToDoList() {
+import ToDoItem from './ToDoItem';
 
-    return (
-      <h2>To do list</h2>
-    )
-  }
-  
-  export default ToDoList
+function ToDoList({ toDoList, deleteToDo }) {
+	return toDoList.length ? (
+		<ul>
+			{toDoList.map((toDo) => (
+				<ToDoItem
+					key={toDo.id}
+					toDo={toDo}
+					deleteToDo={() => deleteToDo(toDo.id)}
+				/>
+			))}
+		</ul>
+	) : (
+		<p>Rien à faire pour le moment</p>
+	);
+}
+
+export default ToDoList;
