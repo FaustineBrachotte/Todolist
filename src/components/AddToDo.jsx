@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Button from './Button';
 
 function AddToDo({ addToDo }) {
 	const [value, setValue] = useState('');
@@ -31,9 +32,7 @@ function AddToDo({ addToDo }) {
 				onChange={handleChange}
 				onKeyDown={handleKeyDown}
 			/>
-			<button className='btn btn-primary' onClick={handleClick}>
-				Ajouter
-			</button>
+			<Button text='Ajouter' onClick={handleClick} />
 		</div>
 	);
 }

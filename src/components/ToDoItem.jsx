@@ -1,3 +1,5 @@
+import Button from './Button';
+
 function ToDoItem({ toDo, deleteToDo, toggleToDo, editToDo, selectToDo }) {
 	return (
 		<li
@@ -9,33 +11,30 @@ function ToDoItem({ toDo, deleteToDo, toggleToDo, editToDo, selectToDo }) {
 			<span className='flex-fill mr-15'>
 				{toDo.content} {toDo.done && '(✓)'}
 			</span>
-			<button
+			<Button
 				onClick={(e) => {
 					e.stopPropagation();
 					toggleToDo();
 				}}
-				className='btn btn-primary mr-15'
-			>
-				Valider
-			</button>
-			<button
+				className='mr-15'
+				text='Valider'
+			/>
+			<Button
 				onClick={(e) => {
 					e.stopPropagation();
 					editToDo();
 				}}
-				className='btn btn-primary mr-15'
-			>
-				Modifier
-			</button>
-			<button
+				className='mr-15'
+				text='Modifier'
+			/>
+
+			<Button
 				onClick={(e) => {
 					e.stopPropagation();
 					deleteToDo();
 				}}
-				className='btn btn-reverse-primary mr-15'
-			>
-				Supprimer
-			</button>
+				text='Supprimer'
+			/>
 		</li>
 	);
 }
