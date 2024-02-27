@@ -1,6 +1,7 @@
 import AddToDo from './components/AddToDo';
 import ToDoList from './components/ToDoList';
 import { useState } from 'react';
+import themeContext from './context/theme';
 
 function App() {
 	const [toDoList, setToDoList] = useState([]);
@@ -73,21 +74,35 @@ function App() {
 		);
 	}
 
+	const [theme, setTheme] = useState('primary');
+
+	function handleChange(e) {
+		setTheme(e.target.value);
+	}
+
 	return (
-		<div className='d-flex flex-row justify-content align-item p-20'>
-			<div className='card container p-20'>
-				<h1 className='mb-20'>To do list</h1>
-				<AddToDo addToDo={addToDo} />
-				<ToDoList
-					toDoList={toDoList}
-					deleteToDo={deleteToDo}
-					toggleToDo={toggleToDo}
-					toggleToDoEdit={toggleToDoEdit}
-					editToDo={editToDo}
-					selectToDo={selectToDo}
-				/>
+		<themeContext.Provider value={theme}>
+			<div className='d-flex flex-row justify-content align-item p-20'>
+				<div className='card container p-20'>
+					<h1 className='mb-20 d-flex flex-row justify-content align-items'>
+						<span className='flex-fill'>To do list</span>
+						<select value={theme} onChange={handleChange}>
+							<option value='primary'>Thème orange</option>
+							<option value='secondary'>Thème bleu</option>
+						</select>
+					</h1>
+					<AddToDo addToDo={addToDo} />
+					<ToDoList
+						toDoList={toDoList}
+						deleteToDo={deleteToDo}
+						toggleToDo={toggleToDo}
+						toggleToDoEdit={toggleToDoEdit}
+						editToDo={editToDo}
+						selectToDo={selectToDo}
+					/>
+				</div>
 			</div>
-		</div>
+		</themeContext.Provider>
 	);
 }
 
