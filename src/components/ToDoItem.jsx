@@ -1,12 +1,15 @@
 import Button from './Button';
+import { useContext } from 'react';
+import themeContext from '../context/theme';
 
 function ToDoItem({ toDo, deleteToDo, toggleToDo, editToDo, selectToDo }) {
+	const theme = useContext(themeContext);
 	return (
 		<li
 			onClick={selectToDo}
 			className={`mb-10 d-flex flex-row justify-content align-items p-10 ${
-				toDo.selected ? 'selected' : ''
-			} `}
+				toDo.selected ? `selected-${theme}` : ''
+			}`}
 		>
 			<span className='flex-fill mr-15'>
 				{toDo.content} {toDo.done && '(✓)'}

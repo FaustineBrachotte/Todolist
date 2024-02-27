@@ -41,8 +41,13 @@
 	padding: 10px 15px;
 }
 
-.selected {
+.selected-primary {
 	border: 2px solid var(--primary);
+	border-radius: 4px;
+}
+
+.selected-secondary {
+	border: 2px solid var(--secondary);
 	border-radius: 4px;
 }
 
