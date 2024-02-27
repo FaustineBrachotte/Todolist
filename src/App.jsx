@@ -1,99 +1,79 @@
 import AddToDo from './components/AddToDo';
 import ToDoList from './components/ToDoList';
-import { useState } from 'react';
+import { useReducer } from 'react';
 import themeContext from './context/theme';
+import toDoReducer from './reducers/toDoReducer';
 
 function App() {
-	const [toDoList, setToDoList] = useState([]);
+	const [state, dispatch] = useReducer(toDoReducer, {
+		theme: 'primary',
+		toDoList: [],
+	});
 
 	function addToDo(content) {
-		const toDo = {
-			id: crypto.randomUUID(),
+		dispatch({
+			type: 'ADD_TODO',
 			content,
-			done: false,
-			edit: false,
-			selected: false,
-		};
-		setToDoList([...toDoList, toDo]);
+		});
 	}
 
 	function deleteToDo(id) {
-		setToDoList(toDoList.filter((todo) => todo.id !== id));
+		dispatch({
+			type: 'DELETE_TODO',
+			id,
+		});
 	}
 
 	function toggleToDo(id) {
-		setToDoList(
-			toDoList.map((toDo) =>
-				toDo.id === id
-					? {
-							...toDo,
-							done: !toDo.done,
-							// eslint-disable-next-line no-mixed-spaces-and-tabs
-					  }
-					: toDo
-			)
-		);
+		dispatch({
+			type: 'TOGGLE_TODO',
+			id,
+		});
 	}
 
 	function toggleToDoEdit(id) {
-		setToDoList(
-			toDoList.map((toDo) =>
-				toDo.id === id
-					? {
-							...toDo,
-							edit: !toDo.edit,
-							// eslint-disable-next-line no-mixed-spaces-and-tabs
-					  }
-					: toDo
-			)
-		);
+		dispatch({
+			type: 'TOGGLE_TODO_EDIT',
+			id,
+		});
 	}
 
 	function editToDo(id, content) {
-		setToDoList(
-			toDoList.map((toDo) =>
-				toDo.id === id
-					? {
-							...toDo,
-							content,
-							edit: false,
-							// eslint-disable-next-line no-mixed-spaces-and-tabs
-					  }
-					: toDo
-			)
-		);
+		dispatch({
+			type: 'EDIT_TODO',
+			id,
+			content,
+		});
 	}
 
 	function selectToDo(id) {
-		setToDoList(
-			toDoList.map((toDo) =>
-				toDo.id === id
-					? { ...toDo, selected: true }
-					: { ...toDo, selected: false }
-			)
-		);
+		dispatch({
+			type: 'SELECT_TODO',
+			id,
+		});
 	}
 
-	const [theme, setTheme] = useState('primary');
-
 	function handleChange(e) {
-		setTheme(e.target.value);
+		dispatch({
+			type: 'SET_THEME',
+			theme: e.target.value,
+		});
 	}
 
 	return (
-		<themeContext.Provider value={theme}>
+		<themeContext.Provider value={state.theme}>
 			<div className='d-flex flex-row justify-content align-item p-20'>
 				<div className='card container p-20'>
 					<h1 className='mb-20 d-flex flex-row justify-content align-items'>
 						<span className='flex-fill'>To do list</span>
-						<select value={theme} onChange={handleChange}>
+						<select value={state.theme} onChange={handleChange}>
 							<option value='primary'>Thème orange</option>
 							<option value='secondary'>Thème bleu</option>
 						</select>
 					</h1>
 					<AddToDo addToDo={addToDo} />
 					<ToDoList
-						toDoList={toDoList}
+						toDoList={state.toDoList}
 						deleteToDo={deleteToDo}
 						toggleToDo={toggleToDo}
 						toggleToDoEdit={toggleToDoEdit}
