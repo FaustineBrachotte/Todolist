@@ -14,14 +14,14 @@ function ToDoList({
 			{toDoList.map((toDo) =>
 				toDo.edit ? (
 					<EditToDo
-						key={toDo.__id}
+						key={toDo._id}
 						toDo={toDo}
 						editToDo={(content) => editToDo(toDo._id, content)}
 						cancelEditToDo={() => toggleToDoEdit(toDo._id)}
 					/>
 				) : (
 					<ToDoItem
-						key={toDo.__id}
+						key={toDo._id}
 						toDo={toDo}
 						deleteToDo={() => deleteToDo(toDo._id)}
 						toggleToDo={() => toggleToDo(toDo._id)}

@@ -1,10 +1,36 @@
 import AddToDo from './components/AddToDo';
 import ToDoList from './components/ToDoList';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import themeContext from './context/theme';
 
 function App() {
 	const [toDoList, setToDoList] = useState([]);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		async function fetchToDo() {
+			try {
+				const response = await fetch('https://restapi.fr/api/todo');
+				if (response.ok) {
+					const toDo = await response.json();
+					if (Array.isArray(toDo)) {
+						setToDoList(toDo);
+					} else {
+						setToDoList([toDo]);
+					}
+				} else {
+					console.error(
+						`Erreur lors de la requête : ${response.status} ${response.statusText}`
+					);
+				}
+			} catch (error) {
+				console.error("Une erreur s'est produite :", error);
+			} finally {
+				setLoading(false);
+			}
+		}
+		fetchToDo();
+	}, []);
 
 	function addToDo(toDo) {
 		setToDoList([...toDoList, toDo]);
@@ -85,14 +111,18 @@ function App() {
 						</select>
 					</h1>
 					<AddToDo addToDo={addToDo} />
-					<ToDoList
-						toDoList={toDoList}
-						deleteToDo={deleteToDo}
-						toggleToDo={toggleToDo}
-						toggleToDoEdit={toggleToDoEdit}
-						editToDo={editToDo}
-						selectToDo={selectToDo}
-					/>
+					{loading ? (
+						<p>Chargement en cours...</p>
+					) : (
+						<ToDoList
+							toDoList={toDoList}
+							deleteToDo={deleteToDo}
+							toggleToDo={toggleToDo}
+							toggleToDoEdit={toggleToDoEdit}
+							editToDo={editToDo}
+							selectToDo={selectToDo}
+						/>
+					)}
 				</div>
 			</div>
 		</themeContext.Provider>
