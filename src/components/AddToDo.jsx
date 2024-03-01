@@ -3,22 +3,53 @@ import Button from './Button';
 
 function AddToDo({ addToDo }) {
 	const [value, setValue] = useState('');
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState(null);
 
 	function handleChange(e) {
 		const inputValue = e.target.value;
 		setValue(inputValue);
 	}
 
+	async function createToDo() {
+		try {
+			setLoading(true);
+			setError(null);
+			const response = await fetch('https://restapi.fr/api/todo', {
+				method: 'POST',
+				body: JSON.stringify({
+					content: value,
+					edit: false,
+					done: false,
+				}),
+				headers: {
+					'Content-type': 'application/json',
+				},
+			});
+			if (response.ok) {
+				const toDo = await response.json();
+				addToDo(toDo);
+			} else {
+				setError('Oops une erreur');
+			}
+		} catch (e) {
+			console.log(e);
+			setError('Oops une erreur');
+		} finally {
+			setLoading(false);
+		}
+		setValue('');
+	}
+
 	function handleClick() {
 		if (value.length) {
-			addToDo(value);
-			setValue('');
+			createToDo();
 		}
 	}
 
 	function handleKeyDown(e) {
-		if (e.code === 'Enter') {
-			handleClick();
+		if (e.code === 'Enter' && value.length) {
+			createToDo();
 		}
 	}
 
@@ -32,7 +63,11 @@ function AddToDo({ addToDo }) {
 				onChange={handleChange}
 				onKeyDown={handleKeyDown}
 			/>
-			<Button text='Ajouter' onClick={handleClick} />
+			{error && <p>{error}</p>}
+			<Button
+				text={loading ? 'Chargement' : 'Ajouter'}
+				onClick={handleClick}
+			/>
 		</div>
 	);
 }

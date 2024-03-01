@@ -6,25 +6,18 @@ import themeContext from './context/theme';
 function App() {
 	const [toDoList, setToDoList] = useState([]);
 
-	function addToDo(content) {
-		const toDo = {
-			id: crypto.randomUUID(),
-			content,
-			done: false,
-			edit: false,
-			selected: false,
-		};
+	function addToDo(toDo) {
 		setToDoList([...toDoList, toDo]);
 	}
 
-	function deleteToDo(id) {
-		setToDoList(toDoList.filter((todo) => todo.id !== id));
+	function deleteToDo(_id) {
+		setToDoList(toDoList.filter((todo) => todo._id !== _id));
 	}
 
-	function toggleToDo(id) {
+	function toggleToDo(_id) {
 		setToDoList(
 			toDoList.map((toDo) =>
-				toDo.id === id
+				toDo._id === _id
 					? {
 							...toDo,
 							done: !toDo.done,
@@ -35,10 +28,10 @@ function App() {
 		);
 	}
 
-	function toggleToDoEdit(id) {
+	function toggleToDoEdit(_id) {
 		setToDoList(
 			toDoList.map((toDo) =>
-				toDo.id === id
+				toDo._id === _id
 					? {
 							...toDo,
 							edit: !toDo.edit,
@@ -49,10 +42,10 @@ function App() {
 		);
 	}
 
-	function editToDo(id, content) {
+	function editToDo(_id, content) {
 		setToDoList(
 			toDoList.map((toDo) =>
-				toDo.id === id
+				toDo._id === _id
 					? {
 							...toDo,
 							content,
@@ -64,10 +57,10 @@ function App() {
 		);
 	}
 
-	function selectToDo(id) {
+	function selectToDo(_id) {
 		setToDoList(
 			toDoList.map((toDo) =>
-				toDo.id === id
+				toDo._id === _id
 					? { ...toDo, selected: true }
 					: { ...toDo, selected: false }
 			)
