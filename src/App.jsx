@@ -40,47 +40,8 @@ function App() {
 		setToDoList(toDoList.filter((todo) => todo._id !== _id));
 	}
 
-	function toggleToDo(_id) {
-		setToDoList(
-			toDoList.map((toDo) =>
-				toDo._id === _id
-					? {
-							...toDo,
-							done: !toDo.done,
-							// eslint-disable-next-line no-mixed-spaces-and-tabs
-					  }
-					: toDo
-			)
-		);
-	}
-
-	function toggleToDoEdit(_id) {
-		setToDoList(
-			toDoList.map((toDo) =>
-				toDo._id === _id
-					? {
-							...toDo,
-							edit: !toDo.edit,
-							// eslint-disable-next-line no-mixed-spaces-and-tabs
-					  }
-					: toDo
-			)
-		);
-	}
-
-	function editToDo(_id, content) {
-		setToDoList(
-			toDoList.map((toDo) =>
-				toDo._id === _id
-					? {
-							...toDo,
-							content,
-							edit: false,
-							// eslint-disable-next-line no-mixed-spaces-and-tabs
-					  }
-					: toDo
-			)
-		);
+	function updateToDo(newToDo) {
+		setToDoList(toDoList.map((t) => (t._id === newToDo._id ? newToDo : t)));
 	}
 
 	function selectToDo(_id) {
@@ -117,9 +78,7 @@ function App() {
 						<ToDoList
 							toDoList={toDoList}
 							deleteToDo={deleteToDo}
-							toggleToDo={toggleToDo}
-							toggleToDoEdit={toggleToDoEdit}
-							editToDo={editToDo}
+							updateToDo={updateToDo}
 							selectToDo={selectToDo}
 						/>
 					)}

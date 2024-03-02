@@ -1,8 +1,32 @@
 import { useState } from 'react';
 import Button from './Button';
 
-function EditToDo({ toDo, editToDo, cancelEditToDo }) {
+function EditToDo({ toDo, updateToDo }) {
 	const [value, setValue] = useState(toDo.content);
+	async function patchToDo(newToDo) {
+		try {
+			// eslint-disable-next-line no-unused-vars
+			const { _id, ...newToDoWithouId } = newToDo;
+			const response = await fetch(
+				`https://restapi.fr/api/todo/${toDo._id}`,
+				{
+					method: 'PATCH',
+					body: JSON.stringify(newToDoWithouId),
+					headers: {
+						'Content-type': 'application/json',
+					},
+				}
+			);
+			if (response.ok) {
+				const newToDo = await response.json();
+				updateToDo(newToDo);
+			} else {
+				console.log('Erreur');
+			}
+		} catch (e) {
+			console.log(e);
+		}
+	}
 
 	function handleChange(e) {
 		const inputValue = e.target.value;
@@ -11,13 +35,13 @@ function EditToDo({ toDo, editToDo, cancelEditToDo }) {
 
 	function handleClick() {
 		if (value.length) {
-			editToDo(value);
+			patchToDo({ ...toDo, content: value, edit: false });
 		}
 	}
 
 	function handleKeyDown(e) {
-		if (e.code === 'Enter') {
-			handleClick();
+		if (e.code === 'Enter' && value.length) {
+			patchToDo({ ...toDo, content: value, edit: false });
 		}
 	}
 
@@ -32,7 +56,10 @@ function EditToDo({ toDo, editToDo, cancelEditToDo }) {
 				onKeyDown={handleKeyDown}
 			/>
 			<Button onClick={handleClick} className='mr-15' text='Sauvegarder' />
-			<Button onClick={cancelEditToDo} text='Annuler' />
+			<Button
+				onClick={() => patchToDo({ ...toDo, edit: false })}
+				text='Annuler'
+			/>
 		</div>
 	);
 }
