@@ -32,16 +32,18 @@ function App() {
 		fetchToDo();
 	}, []);
 
-	function addToDo(toDo) {
-		setToDoList([...toDoList, toDo]);
+	function addToDo(newToDo) {
+		setToDoList([...toDoList, newToDo]);
 	}
 
-	function deleteToDo(_id) {
-		setToDoList(toDoList.filter((todo) => todo._id !== _id));
+	function deleteToDo(deletedToDo) {
+		setToDoList(toDoList.filter((t) => t._id !== deletedToDo._id));
 	}
 
-	function updateToDo(newToDo) {
-		setToDoList(toDoList.map((t) => (t._id === newToDo._id ? newToDo : t)));
+	function updateToDo(updatedToDo) {
+		setToDoList(
+			toDoList.map((t) => (t._id === updatedToDo._id ? updatedToDo : t))
+		);
 	}
 
 	function selectToDo(_id) {

@@ -11,7 +11,7 @@ function ToDoList({ toDoList, deleteToDo, updateToDo, selectToDo }) {
 					<ToDoItem
 						key={toDo._id}
 						toDo={toDo}
-						deleteToDo={() => deleteToDo(toDo._id)}
+						deleteToDo={deleteToDo}
 						updateToDo={updateToDo}
 						selectToDo={() => selectToDo(toDo._id)}
 					/>

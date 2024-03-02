@@ -5,7 +5,7 @@ import themeContext from '../context/theme';
 function ToDoItem({ toDo, deleteToDo, selectToDo, updateToDo }) {
 	const theme = useContext(themeContext);
 
-	async function patchToDo(newToDo) {
+	async function fetchPatchToDo(newToDo) {
 		try {
 			// eslint-disable-next-line no-unused-vars
 			const { _id, ...newToDoWithouId } = newToDo;
@@ -30,6 +30,24 @@ function ToDoItem({ toDo, deleteToDo, selectToDo, updateToDo }) {
 		}
 	}
 
+	async function fetchDeleteToDo() {
+		try {
+			const response = await fetch(
+				`https://restapi.fr/api/todo/${toDo._id}`,
+				{
+					method: 'DELETE',
+				}
+			);
+			if (response.ok) {
+				deleteToDo(toDo);
+			} else {
+				console.log('Erreur');
+			}
+		} catch (e) {
+			console.log(e);
+		}
+	}
+
 	return (
 		<li
 			onClick={selectToDo}
@@ -43,7 +61,7 @@ function ToDoItem({ toDo, deleteToDo, selectToDo, updateToDo }) {
 			<Button
 				onClick={(e) => {
 					e.stopPropagation();
-					patchToDo({ ...toDo, done: !toDo.done });
+					fetchPatchToDo({ ...toDo, done: !toDo.done });
 				}}
 				className='mr-15'
 				text='Valider'
@@ -51,7 +69,7 @@ function ToDoItem({ toDo, deleteToDo, selectToDo, updateToDo }) {
 			<Button
 				onClick={(e) => {
 					e.stopPropagation();
-					patchToDo({ ...toDo, edit: true });
+					fetchPatchToDo({ ...toDo, edit: true });
 				}}
 				className='mr-15'
 				text='Modifier'
@@ -60,7 +78,7 @@ function ToDoItem({ toDo, deleteToDo, selectToDo, updateToDo }) {
 			<Button
 				onClick={(e) => {
 					e.stopPropagation();
-					deleteToDo();
+					fetchDeleteToDo();
 				}}
 				text='Supprimer'
 			/>
