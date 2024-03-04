@@ -3,6 +3,7 @@ import Button from './Button';
 
 function EditToDo({ toDo, updateToDo }) {
 	const [value, setValue] = useState(toDo.content);
+
 	async function patchToDo(newToDo) {
 		try {
 			// eslint-disable-next-line no-unused-vars

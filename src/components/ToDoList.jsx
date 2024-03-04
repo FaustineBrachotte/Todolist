@@ -1,7 +1,7 @@
 import EditToDo from './EditToDo';
 import ToDoItem from './ToDoItem';
 
-function ToDoList({ toDoList, deleteToDo, updateToDo, selectToDo }) {
+function ToDoList({ toDoList, deleteToDo, updateToDo }) {
 	return toDoList.length ? (
 		<ul>
 			{toDoList.map((toDo) =>
@@ -13,7 +13,6 @@ function ToDoList({ toDoList, deleteToDo, updateToDo, selectToDo }) {
 						toDo={toDo}
 						deleteToDo={deleteToDo}
 						updateToDo={updateToDo}
-						selectToDo={() => selectToDo(toDo._id)}
 					/>
 				)
 			)}

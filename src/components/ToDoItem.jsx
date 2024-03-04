@@ -2,7 +2,7 @@ import Button from './Button';
 import { useContext } from 'react';
 import themeContext from '../context/theme';
 
-function ToDoItem({ toDo, deleteToDo, selectToDo, updateToDo }) {
+function ToDoItem({ toDo, deleteToDo, updateToDo }) {
 	const theme = useContext(themeContext);
 
 	async function fetchPatchToDo(newToDo) {
@@ -50,9 +50,12 @@ function ToDoItem({ toDo, deleteToDo, selectToDo, updateToDo }) {
 
 	return (
 		<li
-			onClick={selectToDo}
+			onClick={(e) => {
+				e.stopPropagation();
+				fetchPatchToDo({ ...toDo, select: !toDo.select });
+			}}
 			className={`mb-10 d-flex flex-row justify-content align-items p-10 ${
-				toDo.selected ? `selected-${theme}` : ''
+				toDo.select ? `selected-${theme}` : ''
 			}`}
 		>
 			<span className='flex-fill mr-15'>

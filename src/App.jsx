@@ -1,10 +1,41 @@
 import AddToDo from './components/AddToDo';
 import ToDoList from './components/ToDoList';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 import themeContext from './context/theme';
 
+function toDoReducer(state, action) {
+	switch (action.type) {
+		case 'FETCH_TODO': {
+			return {
+				...state,
+				toDoList: action.toDoList,
+			};
+		}
+		case 'ADD_TODO': {
+			return { ...state, toDoList: [...state.toDoList, action.toDo] };
+		}
+		case 'UPDATE_TODO': {
+			return {
+				...state,
+				toDoList: state.toDoList.map((t) =>
+					t._id === action.toDo._id ? action.toDo : t
+				),
+			};
+		}
+		case 'DELETE_TODO': {
+			return {
+				...state,
+				toDoList: state.toDoList.filter((t) => t._id !== action.toDo._id),
+			};
+		}
+		default: {
+			throw new Error('Action inconnue');
+		}
+	}
+}
+
 function App() {
-	const [toDoList, setToDoList] = useState([]);
+	const [state, dispatch] = useReducer(toDoReducer, { toDoList: [] });
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -14,9 +45,9 @@ function App() {
 				if (response.ok) {
 					const toDo = await response.json();
 					if (Array.isArray(toDo)) {
-						setToDoList(toDo);
+						dispatch({ type: 'FETCH_TODO', toDoList: toDo });
 					} else {
-						setToDoList([toDo]);
+						dispatch({ type: 'FETCH_TODO', toDoList: [toDo] });
 					}
 				} else {
 					console.error(
@@ -33,27 +64,15 @@ function App() {
 	}, []);
 
 	function addToDo(newToDo) {
-		setToDoList([...toDoList, newToDo]);
+		dispatch({ type: 'ADD_TODO', toDo: newToDo });
 	}
 
 	function deleteToDo(deletedToDo) {
-		setToDoList(toDoList.filter((t) => t._id !== deletedToDo._id));
+		dispatch({ type: 'DELETE_TODO', toDo: deletedToDo });
 	}
 
 	function updateToDo(updatedToDo) {
-		setToDoList(
-			toDoList.map((t) => (t._id === updatedToDo._id ? updatedToDo : t))
-		);
-	}
-
-	function selectToDo(_id) {
-		setToDoList(
-			toDoList.map((toDo) =>
-				toDo._id === _id
-					? { ...toDo, selected: true }
-					: { ...toDo, selected: false }
-			)
-		);
+		dispatch({ type: 'UPDATE_TODO', toDo: updatedToDo });
 	}
 
 	const [theme, setTheme] = useState('primary');
@@ -78,10 +97,9 @@ function App() {
 						<p>Chargement en cours...</p>
 					) : (
 						<ToDoList
-							toDoList={toDoList}
+							toDoList={state.toDoList}
 							deleteToDo={deleteToDo}
 							updateToDo={updateToDo}
-							selectToDo={selectToDo}
 						/>
 					)}
 				</div>

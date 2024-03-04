@@ -21,6 +21,7 @@ function AddToDo({ addToDo }) {
 					content: value,
 					edit: false,
 					done: false,
+					select: false,
 				}),
 				headers: {
 					'Content-type': 'application/json',
